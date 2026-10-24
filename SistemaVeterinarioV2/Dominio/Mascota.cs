@@ -6,7 +6,7 @@ public class Mascota : SerVivo
         : base(codigo, nombre)
     {
         Especie = ValidarTexto(especie, "La especie es obligatoria.");
-        // RN-01: toda mascota pertenece a un propietario registrado.
+    
         if (propietarioId <= 0) throw new ArgumentException("Debe seleccionar un propietario.");
         PropietarioId = propietarioId;
     }

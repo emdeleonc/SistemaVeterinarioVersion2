@@ -18,7 +18,6 @@ public sealed class Insumo
     public double Precio { get; }
     public int Stock { get; }
 
-    // RN-03: valida si hay inventario suficiente para la cantidad solicitada.
     public bool HayStock(int cantidad) => cantidad > 0 && Stock >= cantidad;
 
     public string ObtenerInformacion() => $"{Codigo} - {Nombre} | Q{Precio:F2} | Stock: {Stock}";

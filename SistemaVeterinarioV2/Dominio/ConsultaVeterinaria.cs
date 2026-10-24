@@ -24,7 +24,7 @@ public class ConsultaVeterinaria
     public Insumo Insumo { get; private set; }
     public int CantidadInsumo { get; private set; }
 
-    // Indica si ya se registraron peso, temperatura y costo (necesarios para guardar).
+    
     public bool DatosRegistrados => Peso > 0 && Temperatura > 0 && Costo > 0;
 
     public void RegistrarDatos(double peso, double temperatura, double costo)
@@ -37,7 +37,7 @@ public class ConsultaVeterinaria
         Costo = costo;
     }
 
-    // Asigna el insumo usado en el tratamiento (el stock real lo controla la base de datos).
+    
     public void AsignarInsumo(Insumo insumo, int cantidad)
     {
         if (insumo is null) throw new ArgumentException("El insumo es obligatorio.");
@@ -46,7 +46,7 @@ public class ConsultaVeterinaria
         CantidadInsumo = cantidad;
     }
 
-    // Total = costo del servicio + insumo utilizado (si lo hubo).
+    
     public double CalcularTotal()
     {
         double totalInsumo = Insumo is null ? 0 : Insumo.Precio * CantidadInsumo;

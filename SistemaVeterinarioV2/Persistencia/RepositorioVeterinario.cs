@@ -13,7 +13,7 @@ internal sealed class RepositorioVeterinario
         _cadenaConexion = cadenaConexion;
     }
 
-    // CRUD de propietarios
+   
     public DataTable ObtenerPropietarios() => Consultar(
         "SELECT Id, Codigo, Nombre, Telefono, Correo FROM Propietarios ORDER BY Nombre;");
 
@@ -33,7 +33,7 @@ internal sealed class RepositorioVeterinario
     public void EliminarPropietario(int id) => Ejecutar(
         "DELETE FROM Propietarios WHERE Id = $id;", ("$id", id));
 
-    // CRUD de mascotas
+   
     public DataTable ObtenerMascotas() => Consultar(@"SELECT m.Id, m.Codigo, m.Nombre, m.Especie,
         m.PropietarioId, p.Nombre AS Propietario
         FROM Mascotas m
@@ -56,7 +56,7 @@ internal sealed class RepositorioVeterinario
     public void EliminarMascota(int id) => Ejecutar(
         "DELETE FROM Mascotas WHERE Id = $id;", ("$id", id));
 
-    // CRUD de insumos (inventario)
+
     public DataTable ObtenerInsumos() => Consultar(
         "SELECT Id, Codigo, Nombre, Precio, Stock FROM Insumos ORDER BY Nombre;");
 
@@ -90,9 +90,7 @@ internal sealed class RepositorioVeterinario
     public void EliminarInsumo(int id) => Ejecutar(
         "DELETE FROM Insumos WHERE Id = $id;", ("$id", id));
 
-    // CRUD de consultas
-    // El Total usa la misma formula que ConsultaVeterinaria.CalcularTotal():
-    // costo del servicio + (precio del insumo x cantidad), si hubo insumo.
+
     public DataTable ObtenerConsultas() => Consultar(@"SELECT c.Id, c.MascotaId, c.InsumoId,
         m.Codigo AS CodigoMascota, m.Nombre AS Mascota,
         c.Servicio, c.Veterinario, c.Peso, c.Temperatura, c.Costo,
@@ -103,7 +101,7 @@ internal sealed class RepositorioVeterinario
         LEFT JOIN Insumos i ON i.Id = c.InsumoId
         ORDER BY c.Fecha DESC, c.Id DESC;");
 
-    // Devuelve la alerta al administrador (RN-03) o null si no hubo ninguna.
+ 
     public string CrearConsulta(ConsultaVeterinaria consulta)
     {
         ValidarListaParaGuardar(consulta);
@@ -148,9 +146,6 @@ internal sealed class RepositorioVeterinario
             throw new InvalidOperationException("Debe registrar peso, temperatura y costo antes de guardar la consulta.");
     }
 
-    // RN-03: se verifica el stock del insumo solicitado.
-    // - Hay stock: la consulta se guarda con el insumo (el stock NO se descuenta, solo se demuestra la regla).
-    // - No hay stock: se genera la alerta al administrador y la consulta se guarda igual, sin el insumo.
     private (int? InsumoId, int Cantidad, string Alerta) ResolverInsumo(ConsultaVeterinaria consulta)
     {
         if (consulta.Insumo is null) return (null, 0, null);
